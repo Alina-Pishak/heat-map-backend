@@ -2,32 +2,29 @@ import "reflect-metadata";
 import express from "express";
 import { useExpressServer } from "routing-controllers";
 
-// Імпортуємо наш інтерфейс сервісу і контролери
 import { IService } from "types/services";
 import { controllers } from "app/domain";
 import { middlewares } from "app/middlewares";
 
-// Оголошуємо клас Tcp, який реалізує інтерфейс IService
 export class Tcp implements IService {
-  private static instance: Tcp; // Ссылка на единственный экземпляр класса
+  private static instance: Tcp;
 
-  private routePrefix = "/api"; // Префикс для маршрутов API
-  public server = express(); // Экземпляр Express.js // Конструктор, що реалізує шаблон Singleton для класу Tcp
+  private routePrefix = "/api";
+  public server = express();
 
   constructor() {
-    // Якщо екземпляр ще не створено, зберігаємо посилання на поточний екземпляр
     if (!Tcp.instance) {
       Tcp.instance = this;
-    } // Повертаємо посилання на єдиний екземпляр класу
+    }
 
     return Tcp.instance;
-  } // Метод для ініціалізації сервісу
+  }
 
   async init() {
     const { server, routePrefix } = this;
 
-    // Парсимо тіло запиту, потрібно для middlewares
-    server.use(express.json()); // Використовуємо бібліотеку routing-controllers для налаштування маршрутів
+    server.use(express.json());
+    server.use(express.static("public"));
 
     useExpressServer(server, {
       routePrefix,
@@ -35,8 +32,8 @@ export class Tcp implements IService {
       middlewares,
       cors: true,
       defaultErrorHandler: true,
-      validation: false, // Відключаємо вбудовану валідацію, щоб ми могли перевірити DTO самі всередині контролера
-    }); // Повертаємо Promise, який успішно виконується, коли сервер починає слухати порт
+      validation: false,
+    });
 
     return new Promise<boolean>((resolve) => {
       server.listen(4000, () => {

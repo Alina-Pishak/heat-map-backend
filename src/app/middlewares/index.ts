@@ -1,8 +1,7 @@
 import { HTTPRequestLogger } from "./HTTPRequestLogger";
-import { HTTPResponseLogger } from "./HTTPResponseLogger";
 
-type Middleware = typeof HTTPRequestLogger | typeof HTTPResponseLogger;
+type Middleware = typeof HTTPRequestLogger;
 
-const middlewares = <Middleware[]>[HTTPRequestLogger, HTTPResponseLogger];
+const middlewares = <Middleware[]>[HTTPRequestLogger];
 
 export { middlewares };
