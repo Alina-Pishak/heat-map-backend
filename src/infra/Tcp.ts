@@ -5,6 +5,9 @@ import { useExpressServer } from "routing-controllers";
 import { IService } from "types/services";
 import { controllers } from "app/domain";
 import { middlewares } from "app/middlewares";
+require("dotenv").config();
+
+const { PORT } = process.env;
 
 export class Tcp implements IService {
   private static instance: Tcp;
@@ -36,7 +39,7 @@ export class Tcp implements IService {
     });
 
     return new Promise<boolean>((resolve) => {
-      server.listen(4000, () => {
+      server.listen(PORT, () => {
         console.log("Tcp service started on port 4000");
 
         return resolve(true);
