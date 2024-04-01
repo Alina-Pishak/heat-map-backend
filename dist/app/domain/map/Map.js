@@ -19,9 +19,9 @@ const routing_controllers_1 = require("routing-controllers");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const unzipper_1 = __importDefault(require("unzipper"));
-const ApiResponse_1 = require("helpers/ApiResponse");
-const ApiError_1 = require("helpers/ApiError");
-const Upload_1 = require("app/middlewares/Upload");
+const ApiResponse_1 = require("../../../helpers/ApiResponse");
+const ApiError_1 = require("../../../helpers/ApiError");
+const Upload_1 = require("../../middlewares/Upload");
 let Map = class Map {
     async createMap(file) {
         try {

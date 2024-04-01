@@ -7,8 +7,8 @@ exports.Tcp = void 0;
 require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const routing_controllers_1 = require("routing-controllers");
-const domain_1 = require("app/domain");
-const middlewares_1 = require("app/middlewares");
+const domain_1 = require("../app/domain");
+const middlewares_1 = require("../app/middlewares");
 require("dotenv").config();
 const { PORT } = process.env;
 class Tcp {

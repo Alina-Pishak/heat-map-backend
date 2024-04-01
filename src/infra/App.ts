@@ -1,6 +1,6 @@
 import { Tcp } from "./Tcp";
 
-import { IService } from "types/services";
+import { IService } from "../types/services";
 
 export class App implements IService {
   private static instance: App;

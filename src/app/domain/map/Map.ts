@@ -9,9 +9,9 @@ import fs from "fs";
 import path from "path";
 import unzipper from "unzipper";
 
-import { ApiResponse } from "helpers/ApiResponse";
-import { ApiError } from "helpers/ApiError";
-import { fileUploadOptions } from "app/middlewares/Upload";
+import { ApiResponse } from "../../../helpers/ApiResponse";
+import { ApiError } from "../../../helpers/ApiError";
+import { fileUploadOptions } from "../../middlewares/Upload";
 
 @JsonController("/map")
 export default class Map {
