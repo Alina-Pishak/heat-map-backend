@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/unzipper": "^0.10.9",
     "binary-parser": "^2.2.1",
     "canvas": "^2.11.2",
     "class-transformer": "^0.5.1",

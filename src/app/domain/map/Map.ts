@@ -29,16 +29,21 @@ export default class Map {
         .pipe(unzipper.Extract({ path: zipFilePath }))
         .promise();
       fs.unlinkSync(file.path);
-      let filename: string = "";
+      let fileURL;
       const newFiles = await fs.promises.readdir(zipFilePath);
       for (let i = 0; i < newFiles.length; i += 1) {
         const fileExt = newFiles[i].split(".").pop();
         if (fileExt) {
           const filePath = path.join(zipFilePath, newFiles[i]);
-          filename = readFile(filePath);
+          fileURL = await readFile(filePath);
         }
       }
-      return res.download(filename);
+      const stream = fs.createReadStream(fileURL);
+      res.set({
+        "Content-Disposition": `attachment; filename='heatmap.png'`,
+        "Content-Type": "application/pdf",
+      });
+      stream.pipe(res);
     } catch (error) {
       console.log(error);
       return new ApiError(500, { message: "Error processing ZIP file" });

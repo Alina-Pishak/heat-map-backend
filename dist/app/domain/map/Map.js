@@ -36,16 +36,21 @@ let Map = class Map {
                 .pipe(unzipper_1.default.Extract({ path: zipFilePath }))
                 .promise();
             fs_1.default.unlinkSync(file.path);
-            let filename = "";
+            let fileURL;
             const newFiles = await fs_1.default.promises.readdir(zipFilePath);
             for (let i = 0; i < newFiles.length; i += 1) {
                 const fileExt = newFiles[i].split(".").pop();
                 if (fileExt) {
                     const filePath = path_1.default.join(zipFilePath, newFiles[i]);
-                    filename = (0, readFile_1.readFile)(filePath);
+                    fileURL = await (0, readFile_1.readFile)(filePath);
                 }
             }
-            return res.download(filename);
+            const stream = fs_1.default.createReadStream(fileURL);
+            res.set({
+                "Content-Disposition": `attachment; filename='heatmap.png'`,
+                "Content-Type": "application/pdf",
+            });
+            stream.pipe(res);
         }
         catch (error) {
             console.log(error);
@@ -65,14 +70,4 @@ Map = __decorate([
     (0, routing_controllers_1.JsonController)("/map")
 ], Map);
 exports.default = Map;
-// const heatmapGenerator = new HeatmapGenerator(400, 400);
-// heatmapGenerator.generateHeatmap();
-// // Додавання точок
-// const points: Point[] = [
-//   { x: 100, y: 100 },
-//   { x: 200, y: 200 },
-//   { x: 300, y: 300 },
-// ];
-// heatmapGenerator.drawPoints(points);
-// heatmapGenerator.saveHeatmapToFile(__dirname + "/heatmap.png");
 //# sourceMappingURL=Map.js.map
