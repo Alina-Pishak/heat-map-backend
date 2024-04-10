@@ -19,32 +19,36 @@ const routing_controllers_1 = require("routing-controllers");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const unzipper_1 = __importDefault(require("unzipper"));
-const ApiResponse_1 = require("../../../helpers/ApiResponse");
 const ApiError_1 = require("../../../helpers/ApiError");
 const Upload_1 = require("../../middlewares/Upload");
+const readFile_1 = require("../../../helpers/readFile");
 let Map = class Map {
-    async createMap(file) {
+    async createMap(file, res) {
         try {
             if (!file || file.mimetype !== "application/zip") {
                 return new ApiError_1.ApiError(400, {
                     message: "File must be in zip archive format",
                 });
             }
-            const zipFilePath = path_1.default.join("public/zips", file.originalname);
-            fs_1.default.renameSync(file.path, zipFilePath);
-            const extractPath = path_1.default.join("public/maps");
+            const zipFilePath = path_1.default.join("public/zip");
             await fs_1.default
-                .createReadStream(zipFilePath)
-                .pipe(unzipper_1.default.Extract({ path: extractPath }))
+                .createReadStream(file.path)
+                .pipe(unzipper_1.default.Extract({ path: zipFilePath }))
                 .promise();
-            const files = await fs_1.default.promises.readdir(extractPath);
-            const filePath = path_1.default.join(extractPath, files[0]);
-            const data = await fs_1.default.promises.readFile(filePath);
-            fs_1.default.unlinkSync(zipFilePath);
-            fs_1.default.unlinkSync(filePath);
-            return new ApiResponse_1.ApiResponse(true, data, " ZIP file processed successfully");
+            fs_1.default.unlinkSync(file.path);
+            let filename = "";
+            const newFiles = await fs_1.default.promises.readdir(zipFilePath);
+            for (let i = 0; i < newFiles.length; i += 1) {
+                const fileExt = newFiles[i].split(".").pop();
+                if (fileExt) {
+                    const filePath = path_1.default.join(zipFilePath, newFiles[i]);
+                    filename = (0, readFile_1.readFile)(filePath);
+                }
+            }
+            return res.download(filename);
         }
         catch (error) {
+            console.log(error);
             return new ApiError_1.ApiError(500, { message: "Error processing ZIP file" });
         }
     }
@@ -52,12 +56,23 @@ let Map = class Map {
 __decorate([
     (0, routing_controllers_1.Post)(),
     __param(0, (0, routing_controllers_1.UploadedFile)("map", { options: Upload_1.fileUploadOptions })),
+    __param(1, (0, routing_controllers_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Map.prototype, "createMap", null);
 Map = __decorate([
     (0, routing_controllers_1.JsonController)("/map")
 ], Map);
 exports.default = Map;
+// const heatmapGenerator = new HeatmapGenerator(400, 400);
+// heatmapGenerator.generateHeatmap();
+// // Додавання точок
+// const points: Point[] = [
+//   { x: 100, y: 100 },
+//   { x: 200, y: 200 },
+//   { x: 300, y: 300 },
+// ];
+// heatmapGenerator.drawPoints(points);
+// heatmapGenerator.saveHeatmapToFile(__dirname + "/heatmap.png");
 //# sourceMappingURL=Map.js.map
