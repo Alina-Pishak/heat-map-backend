@@ -45,16 +45,3 @@ export default class Map {
     }
   }
 }
-
-// const heatmapGenerator = new HeatmapGenerator(400, 400);
-// heatmapGenerator.generateHeatmap();
-
-// // Додавання точок
-// const points: Point[] = [
-//   { x: 100, y: 100 },
-//   { x: 200, y: 200 },
-//   { x: 300, y: 300 },
-// ];
-// heatmapGenerator.drawPoints(points);
-
-// heatmapGenerator.saveHeatmapToFile(__dirname + "/heatmap.png");
