@@ -1,6 +1,6 @@
 import fs from "fs";
 
-// import { generateHeatmap } from "./generateHeatmap";
+import { generateHeatmap } from "./generateHeatmap";
 import { ApiError } from "./ApiError";
 
 export async function readFile(filename: string) {
@@ -13,7 +13,7 @@ export async function readFile(filename: string) {
     });
     let filePath;
     stream.on("end", async () => {
-      // filePath = await generateHeatmap(data);
+      filePath = await generateHeatmap(data);
       fs.unlinkSync(filename);
     });
     return filePath;
